@@ -26,6 +26,7 @@ class Trade(Base):
     symbol = Column(String, index=True)
     entry_time = Column(DateTime, default=datetime.utcnow)
     exit_time = Column(DateTime, nullable=True)
+    target_exit_time = Column(DateTime, nullable=True)
     spot_entry_price = Column(Float)
     futures_entry_price = Column(Float)
     spot_exit_price = Column(Float, nullable=True)

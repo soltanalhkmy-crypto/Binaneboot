@@ -30,7 +30,17 @@ class TradingBot:
         })
 
         self.running = False
+
+        # Load any existing open trade from database
         self.current_trade = None
+        try:
+            with SessionLocal() as db:
+                open_trade = db.query(Trade).filter(Trade.status == "open").first()
+                if open_trade:
+                    self.current_trade = open_trade.id
+                    logger.info(f"Resumed active trade state for ID: {self.current_trade}")
+        except Exception as e:
+            logger.error(f"Error loading open trades on init: {e}")
 
     def get_settings(self):
         with SessionLocal() as db:
@@ -69,14 +79,18 @@ class TradingBot:
     def check_prices(self, symbol):
         base_symbol = symbol.replace(':USDT', '/USDT')
         try:
-            spot_ticker = self.spot_exchange.fetch_ticker(base_symbol)
-            futures_ticker = self.futures_exchange.fetch_ticker(symbol)
+            # Use fetch_order_book to get actual liquidity and spread rather than just the 'last' price
+            spot_ob = self.spot_exchange.fetch_order_book(base_symbol, limit=5)
+            futures_ob = self.futures_exchange.fetch_order_book(symbol, limit=5)
 
-            spot_price = spot_ticker['last']
-            futures_price = futures_ticker['last']
+            if not spot_ob['asks'] or not futures_ob['bids']:
+                return False, 0, 0
+
+            # Spot Ask (price we buy at), Futures Bid (price we sell at)
+            spot_price = spot_ob['asks'][0][0]
+            futures_price = futures_ob['bids'][0][0]
 
             # Futures price must be higher to avoid loss on entry (since we short futures and buy spot)
-            # Actually, for cash and carry, if futures is higher, we short high and buy low.
             # We also need to factor in the spread and fees (approx 0.1% for spot, 0.05% for futures)
             fee_buffer = 0.0015 * spot_price
 
@@ -148,15 +162,29 @@ class TradingBot:
         amount = self.spot_exchange.amount_to_precision(base_symbol, amount)
         amount = float(amount)
 
+        # Ensure leverage is set to 1x for the futures symbol before entering
+        try:
+            logger.info(f"Setting leverage to 1x for {futures_symbol}")
+            self.futures_exchange.set_leverage(1, futures_symbol)
+        except Exception as e:
+            logger.error(f"Error setting leverage for {futures_symbol}: {e}")
+            # If we can't set leverage to 1x, it's safer to abort the trade
+            return False
+
         logger.info(f"Executing entry: Buy Spot, Short Futures for {amount} {base_symbol}")
         spot_res, futures_res = self.execute_concurrent_orders(base_symbol, futures_symbol, amount, "enter")
 
         with SessionLocal() as db:
+            # Calculate exact target exit time based on funding timestamp + safe seconds
+            funding_time = datetime.utcfromtimestamp(symbol_info['fundingTimestamp'] / 1000.0)
+            target_exit = funding_time + timedelta(seconds=settings.exit_safe_seconds)
+
             trade = Trade(
                 symbol=futures_symbol,
-                spot_entry_price=spot_price, # Roughly, should get from order result in prod
+                spot_entry_price=spot_price,
                 futures_entry_price=futures_price,
-                amount=amount
+                amount=amount,
+                target_exit_time=target_exit
             )
 
             if not spot_res['success'] or not futures_res['success']:
@@ -231,26 +259,15 @@ class TradingBot:
             return
 
         if self.current_trade:
-            # Check if it's time to exit
-            # We exit when funding timestamp is reached + exit_safe_seconds
-            # For simplicity in this logic, we will fetch the next funding time
+            # Check if it's time to exit using the stored target_exit_time
             with SessionLocal() as db:
                 trade = db.query(Trade).filter(Trade.id == self.current_trade).first()
                 if not trade:
                     self.current_trade = None
                     return
 
-                try:
-                    info = self.futures_exchange.fetch_funding_rate(trade.symbol)
-                    funding_time_ms = info['fundingTimestamp']
-                    funding_time = datetime.utcfromtimestamp(funding_time_ms / 1000.0)
-
-                    exit_time = funding_time + timedelta(seconds=settings.exit_safe_seconds)
-
-                    if datetime.utcnow() >= exit_time:
-                        self.exit_trade()
-                except Exception as e:
-                    logger.error(f"Error checking exit time: {e}")
+                if trade.target_exit_time and datetime.utcnow() >= trade.target_exit_time:
+                    self.exit_trade()
         else:
             # We are not in a trade, look for one
             opportunity = self.scan_markets(settings.target_funding_rate)
@@ -273,10 +290,12 @@ class TradingBot:
         while self.running:
             try:
                 self.run_cycle()
-                time.sleep(30) # Check every 30 seconds
+                # Check faster if we are in a trade to ensure accurate exit timing
+                sleep_time = 2 if self.current_trade else 30
+                time.sleep(sleep_time)
             except Exception as e:
                 logger.error(f"Error in main loop: {e}")
-                time.sleep(60)
+                time.sleep(30)
 
     def stop(self):
         self.running = False
