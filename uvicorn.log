@@ -1,0 +1,71 @@
+INFO:     Started server process [64219]
+INFO:     Waiting for application startup.
+2026-10-07 14:18:45,441 - app.bot.trading_bot - INFO - Trading bot background thread started.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:33276 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33276 - "GET /static/js/auth.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33276 - "POST /api/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33276 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33276 - "GET /static/js/dashboard.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33276 - "GET /api/settings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33290 - "GET /api/trades HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33290 - "POST /api/toggle_bot HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33290 - "PUT /api/settings HTTP/1.1" 200 OK
+2026-10-07 14:19:45,456 - app.bot.trading_bot - INFO - Scanning markets for funding rates...
+2026-10-07 14:19:45,580 - app.bot.trading_bot - ERROR - Error scanning markets: binanceusdm GET https://api.binance.com/sapi/v1/capital/config/getall?timestamp=1791382785456&recvWindow=10000&signature=128f3826bbb49e939fc3a296642460392d2b8b6258d068e56ac34eb7cbdde183 451  {
+  "code": 0,
+  "msg": "Service unavailable from a restricted location according to 'b. Eligibility' in https://www.binance.com/en/terms. Please contact customer service if you believe you received this message in error."
+}
+2026-10-07 14:20:15,582 - app.bot.trading_bot - INFO - Scanning markets for funding rates...
+2026-10-07 14:20:15,598 - app.bot.trading_bot - ERROR - Error scanning markets: binanceusdm GET https://api.binance.com/sapi/v1/capital/config/getall?timestamp=1791382815582&recvWindow=10000&signature=b98382113970dda3e7f0e42375468190bd1b8e32ec4f0c0e557cf9c0827fe96c 451  {
+  "code": 0,
+  "msg": "Service unavailable from a restricted location according to 'b. Eligibility' in https://www.binance.com/en/terms. Please contact customer service if you believe you received this message in error."
+}
+2026-10-07 14:20:45,600 - app.bot.trading_bot - INFO - Scanning markets for funding rates...
+2026-10-07 14:20:45,614 - app.bot.trading_bot - ERROR - Error scanning markets: binanceusdm GET https://api.binance.com/sapi/v1/capital/config/getall?timestamp=1791382845600&recvWindow=10000&signature=17e1bcc6bad7ef20ff9dfd52337b223fefa9a7685b1ed265b9ed9762645832dd 451  {
+  "code": 0,
+  "msg": "Service unavailable from a restricted location according to 'b. Eligibility' in https://www.binance.com/en/terms. Please contact customer service if you believe you received this message in error."
+}
+2026-10-07 14:21:15,616 - app.bot.trading_bot - INFO - Scanning markets for funding rates...
+2026-10-07 14:21:15,630 - app.bot.trading_bot - ERROR - Error scanning markets: binanceusdm GET https://api.binance.com/sapi/v1/capital/config/getall?timestamp=1791382875616&recvWindow=10000&signature=58c46a11633ba049d549dbce07322840e9ec0a68e31cfe01346f49dbfeba816a 451  {
+  "code": 0,
+  "msg": "Service unavailable from a restricted location according to 'b. Eligibility' in https://www.binance.com/en/terms. Please contact customer service if you believe you received this message in error."
+}
+2026-10-07 14:21:45,632 - app.bot.trading_bot - INFO - Scanning markets for funding rates...
+2026-10-07 14:21:45,647 - app.bot.trading_bot - ERROR - Error scanning markets: binanceusdm GET https://api.binance.com/sapi/v1/capital/config/getall?timestamp=1791382905632&recvWindow=10000&signature=e000b787f53da4d521dc8e08c4e26f3f1422a96cdeee26a6d850032fc481657b 451  {
+  "code": 0,
+  "msg": "Service unavailable from a restricted location according to 'b. Eligibility' in https://www.binance.com/en/terms. Please contact customer service if you believe you received this message in error."
+}
+2026-10-07 14:22:15,649 - app.bot.trading_bot - INFO - Scanning markets for funding rates...
+2026-10-07 14:22:15,664 - app.bot.trading_bot - ERROR - Error scanning markets: binanceusdm GET https://api.binance.com/sapi/v1/capital/config/getall?timestamp=1791382935649&recvWindow=10000&signature=abe533fcc357725c103596067866d32beaf79b9195b1b87ef4b74c17821a9e2f 451  {
+  "code": 0,
+  "msg": "Service unavailable from a restricted location according to 'b. Eligibility' in https://www.binance.com/en/terms. Please contact customer service if you believe you received this message in error."
+}
+INFO:     127.0.0.1:38736 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38736 - "GET /static/js/auth.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38736 - "POST /api/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38736 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38736 - "GET /static/js/dashboard.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38736 - "GET /api/settings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53974 - "GET /api/trades HTTP/1.1" 200 OK
+2026-10-07 14:22:45,665 - app.bot.trading_bot - INFO - Scanning markets for funding rates...
+2026-10-07 14:22:45,680 - app.bot.trading_bot - ERROR - Error scanning markets: binanceusdm GET https://api.binance.com/sapi/v1/capital/config/getall?timestamp=1791382965665&recvWindow=10000&signature=986f485099310adddf08e63c75cc9e9aa24cecb3ed8ef34cb20045f776c075aa 451  {
+  "code": 0,
+  "msg": "Service unavailable from a restricted location according to 'b. Eligibility' in https://www.binance.com/en/terms. Please contact customer service if you believe you received this message in error."
+}
+2026-10-07 14:23:15,682 - app.bot.trading_bot - INFO - Scanning markets for funding rates...
+2026-10-07 14:23:15,698 - app.bot.trading_bot - ERROR - Error scanning markets: binanceusdm GET https://api.binance.com/sapi/v1/capital/config/getall?timestamp=1791382995683&recvWindow=10000&signature=7e36de67a28edd62629fd31d56e8a1778a379b7bd9dc30a77453f8ffa751a78d 451  {
+  "code": 0,
+  "msg": "Service unavailable from a restricted location according to 'b. Eligibility' in https://www.binance.com/en/terms. Please contact customer service if you believe you received this message in error."
+}
+INFO:     127.0.0.1:58270 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58270 - "GET /static/js/auth.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58270 - "POST /api/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58270 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58270 - "GET /static/js/dashboard.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58270 - "GET /api/settings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58286 - "GET /api/trades HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58286 - "POST /api/toggle_bot HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58286 - "PUT /api/settings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58286 - "PUT /api/credentials HTTP/1.1" 404 Not Found
